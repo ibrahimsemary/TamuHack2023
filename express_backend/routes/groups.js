@@ -15,9 +15,14 @@ router.post('/add-group', async(req, res) => {
         if (description === "") {
             description = null;
         }
-        const result = await client.query(`INSERT INTO group (creator, title, description) VALUES ('${myUser}','${title}','${description}')`)
+        await client.query(`INSERT INTO groups (creator, title, description) 
+                                VALUES ('${myUser}','${title}','${description}')`)
+        const result = await client.query(`SELECT max(id) FROM groups`)
+        const id = result.rows[0].max
+        await client.query(`INSERT INTO groups_users (groupsid, username) 
+                                VALUES ('${id}','${myUser}')`)
         console.log(result)
-        res.send(result.rows[0].id)
+        res.send((id).toString())
     } catch (err) {
         console.log(err.message);
         res.send("User cannot be found");
