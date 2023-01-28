@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const pg = require('pg')
+app.use(express.json())
 
 const PORT = 4000
 
@@ -21,6 +22,22 @@ app.get('/test-db', async (req, res, next) => {
         res.send(err.message);
     }
 });
+
+app.post('/authenticate', async(req, res) => {
+    try {
+        console.log(req.body)
+        const myUser = req.body.username
+        const result = await client.query(`SELECT * FROM users WHERE username = '${myUser}'`)
+        if(result.rows[0].password === req.body.password){
+            res.send(myUser);
+        } else {
+            res.send("Cannot Authenticate");
+        }
+    } catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
 
 const exampleRoute = require('./routes/exRoute');
 app.use('/ex/', exampleRoute);
