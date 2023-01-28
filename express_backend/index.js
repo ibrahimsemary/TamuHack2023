@@ -39,8 +39,14 @@ app.post('/authenticate', async(req, res) => {
     }
 })
 
-const exampleRoute = require('./routes/exRoute');
+const exampleRoute = require('./routes/exRoute.js');
 app.use('/ex/', exampleRoute);
+
+const events = require('./routes/events.js');
+app.use('/', events);
+
+//const groups = require('./routes/group.js');
+//app.use('/', groups);
 
 
 app.listen(PORT, function () {
