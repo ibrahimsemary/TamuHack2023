@@ -1,22 +1,31 @@
+const express = require('express')
+const app = express()
+const pg = require('pg')
 
-const oracledb = require('oracledb');
-const config = {
-    user: 'admin',
-    password: 'TAMUHack2023',
-    connectString: '(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-phoenix-1.oraclecloud.com))(connect_data=(service_name=g0f3a6371b27c34_kc73yy3i79cfa1jv_medium.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))'
-}
+const PORT = 4000
 
-async function testFunction() {
-    let conn;
+var conString = "postgresql://postgres:BGSMnZeKu6JGykthxCsB@containers-us-west-188.railway.app:5471/railway"
+var client = new pg.Client(conString);
+client.connect();
+
+app.get('/test-connection', (req, res, next) => { 
+    res.send("hi");
+});
+
+app.get('/test-db', async (req, res, next) => { 
     try {
-        conn = await oracledb.getConnection(config);
-        const result = await conn.execute("SELECT * FROM profiles");
-        console.log(result.rows)
+        const result = await client.query("SELECT * FROM users");
+        res.send(result.rows)
     } catch (err) {
-        console.log('error', err)
-    } finally {
-        if(conn) await conn.close();
+        console.log(err.message);
+        res.send(err.message);
     }
-}
+});
 
-testFunction()
+const exampleRoute = require('./routes/exRoute');
+app.use('/ex/', exampleRoute);
+
+
+app.listen(PORT, function () {
+    console.log('Server is running on port ' + PORT);
+});
