@@ -47,6 +47,28 @@
 .flex {
     display: flex;
 }
-.twenty-five{
+.twenty-five {
     width: 25%;
 }
+.sidebar-container {
+    width: 20%;
+    height: 100%;
+}
+.sidebar-item-text {
+    cursor: pointer;
+    padding: 20px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+}
+.sidebar-item-text:hover {
+    color: gainsboro;
+}
+.sidebar-item-text-active {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    padding: 20px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+}
+
