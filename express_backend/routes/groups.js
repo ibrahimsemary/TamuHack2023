@@ -1,6 +1,5 @@
 const express = require('express')
 const pg = require('pg')
-app.use(express.json())
 var conString = "postgresql://postgres:BGSMnZeKu6JGykthxCsB@containers-us-west-188.railway.app:5471/railway"
 var client = new pg.Client(conString);
 client.connect();
@@ -24,3 +23,6 @@ router.post('/add-group', async(req, res) => {
         res.send("User cannot be found");
     }
 })
+
+
+module.exports = router

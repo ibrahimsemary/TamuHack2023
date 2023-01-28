@@ -45,8 +45,8 @@ app.use('/ex/', exampleRoute);
 const events = require('./routes/events.js');
 app.use('/', events);
 
-//const groups = require('./routes/group.js');
-//app.use('/', groups);
+const groups = require('./routes/groups.js');
+app.use('/', groups);
 
 
 app.listen(PORT, function () {
