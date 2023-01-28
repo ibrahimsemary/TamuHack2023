@@ -50,8 +50,8 @@ app.use('/', events);
 const groups = require('./routes/groups.js');
 app.use('/', groups);
 
-const users = require('./routes/users.js');
-app.use('/', users);
+// const users = require('./routes/users.js');
+// app.use('/', users);
 
 
 app.listen(PORT, function () {
