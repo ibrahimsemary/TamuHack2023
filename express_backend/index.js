@@ -3,7 +3,7 @@ const app = express()
 const pg = require('pg')
 app.use(express.json())
 
-const PORT = 4000
+const PORT = process.env.PORT || 4000
 
 var conString = "postgresql://postgres:BGSMnZeKu6JGykthxCsB@containers-us-west-188.railway.app:5471/railway"
 var client = new pg.Client(conString);
