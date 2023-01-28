@@ -44,3 +44,9 @@
     color: red;
     font-size: smaller;
 }
+.flex {
+    display: flex;
+}
+.twenty-five{
+    width: 25%;
+}

@@ -6,7 +6,7 @@ import "../Overall.css";
 import "./SignInPage.css";
 import { TextField } from "@mui/material";
 
-const SignInPage = () => {
+const SignInPage = ({ setPage }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -70,7 +70,13 @@ const SignInPage = () => {
                     <div className='to-center'>
                         <div className='sign-in-sign-up-text'>
                             <p>Don't have an account?</p>
-                            <p className='sign-in-sign-up'> Sign Up</p>
+                            <p
+                                className='sign-in-sign-up'
+                                onClick={() => setPage("SignUpPage")}
+                            >
+                                {" "}
+                                Sign Up
+                            </p>
                         </div>
                     </div>
                     <div className='to-center'>
