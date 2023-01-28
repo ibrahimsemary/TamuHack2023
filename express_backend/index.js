@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
+const dotenv = require('dotenv').config();
 const pg = require('pg')
 app.use(express.json())
 
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 4000;
 
 var conString = "postgresql://postgres:BGSMnZeKu6JGykthxCsB@containers-us-west-188.railway.app:5471/railway"
 var client = new pg.Client(conString);
@@ -47,6 +48,9 @@ app.use('/', events);
 
 const groups = require('./routes/groups.js');
 app.use('/', groups);
+
+const users = require('./routes/users.js');
+app.use('/', users);
 
 
 app.listen(PORT, function () {
