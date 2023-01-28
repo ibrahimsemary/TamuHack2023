@@ -71,4 +71,28 @@
     border-top-right-radius: 100px;
     border-bottom-right-radius: 100px;
 }
+.card-container {
+    box-shadow: 1px 5px 5px 5px rgb(131, 131, 131);
+    width: 25%;
+    height: 200px;
+    cursor: pointer;
+}
+.card-container:hover {
+    box-shadow: 1px 5px 10px 5px rgb(131, 131, 131);
+}
 
+.card-title {
+    padding-top: 25px;
+    padding-bottom: 10px;
+}
+.avatar-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 20px;
+}
+.avatar {
+    margin-bottom: 10px;
+}
+.delete-button {
+    float: right;
+}
