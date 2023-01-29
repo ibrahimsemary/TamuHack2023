@@ -10,12 +10,29 @@ import Header from "../components/Header";
 import GroupEvent from "../components/GroupEvent";
 import axios from "axios";
 import { Avatar } from "@mui/material";
+import EventCard from "../components/EventCard";
 
 const GroupPage = ({ groupId, curr_user, setPage }) => {
     const [times, setTimes] = useState([]);
     const [displayTimes, setDisplayTimes] = useState([]);
     const [imgs, setImgs] = useState([]);
     const [activeIndex, setActiveIndex] = useState(null);
+    const [groupEvents, setGroupEvents] = useState([]);
+    const [groupName, setGroupName] = useState("");
+
+    const getGroupName = async () => {
+        const res = await axios.get(
+            `https://group-sync.onrender.com/get-group/${groupId}`
+        );
+        setGroupName(res.data);
+    };
+
+    const callApi = async () => {
+        const res = await axios.get(
+            `https://group-sync.onrender.com/event/groupsid/${groupId}`
+        );
+        console.log(res.data);
+    };
 
     const getImgs = async () => {
         const res = await axios.get(
@@ -60,10 +77,11 @@ const GroupPage = ({ groupId, curr_user, setPage }) => {
     useEffect(() => {
         getTimes();
         getImgs();
+        getGroupName();
     }, []);
 
     const [active, setActive] = useState(0);
-    const groupSidebarList = ["Calendar", "Back"];
+    const groupSidebarList = ["Calendar", "Events", "Back"];
 
     const displayIntervals = () => {
         if (displayTimes.length === 0) {
@@ -196,6 +214,9 @@ const GroupPage = ({ groupId, curr_user, setPage }) => {
                 </div>
             );
         } else if (active === 1) {
+            callApi();
+            return <div className='main-card-container'>{<EventCard />}</div>;
+        } else if (active === 2) {
             setPage("MainPage");
         }
     };
@@ -203,7 +224,7 @@ const GroupPage = ({ groupId, curr_user, setPage }) => {
     return (
         <div>
             <div className='group-topbar-container'>
-                <TopBar title={"Placeholder Group"} />
+                <TopBar title={groupName}/>
             </div>
             <br />
             <div className='sidebar-card-container'>

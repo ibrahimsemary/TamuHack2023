@@ -178,3 +178,20 @@
 .button-stuff{
     padding: 20px;
 }
+.button-grid{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+}
+.accept-button{
+    padding: 10%;
+    width: 100%;
+}
+.reject-button{
+    width: 100%;
+    padding: 10%;
+}
+.group-card-container{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
