@@ -25,9 +25,10 @@ router.get('/getusers', async (req, res) => {
 })
 router.post('/add-group', async(req, res) => {
     try {
-        const myUser = req.body.username
+        const myUser = req.body.creator
         const title = req.body.title
         var description = req.body.description
+        const usernames = req.body.usernames
         if (description === "") {
             description = null;
         }
@@ -37,6 +38,10 @@ router.post('/add-group', async(req, res) => {
         const id = result.rows[0].max
         await client.query(`INSERT INTO groups_users (groupsid, username) 
                                 VALUES ('${id}','${myUser}')`)
+        for (let i = 0; i < usernames.length; ++i){
+            await client.query(`INSERT INTO groups_users (groupsid, username) 
+                                VALUES ('${id}','${usernames[i]}')`)
+        }
         res.send((id).toString())
     } catch (err) {
         console.log(err.message);
@@ -46,9 +51,11 @@ router.post('/add-group', async(req, res) => {
 router.post('/add-user-group', async(req, res) => {
     try {
         const myUser = req.body.username
-        const groupid = req.body.groupid
+        const groupsid = req.body.groupsid
         await client.query(`INSERT INTO groups_users (groupsid, username) 
-                                VALUES ('${groupid}','${myUser}')`)
+                                VALUES ('${groupsid}','${myUser}')`)
+        const result = await client.query(`SELECT max(id) FROM groups`)
+        const id = result.rows[0].max
         res.send((id).toString())
     } catch (err) {
         console.log(err.message);

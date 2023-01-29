@@ -7,7 +7,8 @@ var client = new pg.Client(conString);
 client.connect();
 
 /**
- * requires : creator, start_time, end_time, description, usernames
+ * requires : creator, start_time, end_time, description
+ * UNFINISHED
  */
 router.post('/add-event', async(req, res) => {
     try {
