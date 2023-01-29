@@ -11,23 +11,30 @@ client.connect();
  */
 router.post('/add-event', async(req, res) => {
     try {
-        // add to events table
-        const result = await client.query(`INSERT INTO events (creator, start_time, end_time, description) 
-                      VALUES ('${req.body.creator}', '${req.body.start_time}', '${req.body.end_time}', '${req.body.description}')`);
-        console.log(result.rows);
-        //let eventid = 5
-        // add to event-users table
-        // for(var i=0; i<req.body.usernames.size(); i++){
-        //     await client.query(`INSERT INTO event-users (eventid, username) VALUES (${eventid}, '${req.body.usernames[i]}')`);
-        // }
-        res.send("success")
-        
-    } catch(err) {
-        res.send(err.message);
+        await client.query(`INSERT INTO events (creator, start_time, end_time, description) 
+                    VALUES ('${req.body.creator}', '${req.body.start_time}', '${req.body.end_time}', '${req.body.description}')`);
+        const result = await client.query(`SELECT max(id) FROM events`)
+        const id = result.rows[0].max
+        await client.query(`INSERT INTO events_users (eventid, username) 
+                                VALUES ('${id}','${req.body.creator}')`)
+        res.send((id).toString())
+    } catch (err) {
         console.log(err.message);
+        res.send("User cannot be found");
     }
-});
-
+})
+router.post('/add-user-group', async(req, res) => {
+    try {
+        const myUser = req.body.username
+        const groupid = req.body.groupid
+        await client.query(`INSERT INTO groups_users (groupsid, username) 
+                                VALUES ('${groupid}','${myUser}')`)
+        res.send((id).toString())
+    } catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
 
 
 module.exports = router

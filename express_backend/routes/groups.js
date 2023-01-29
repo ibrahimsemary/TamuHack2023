@@ -6,6 +6,23 @@ client.connect();
 
 const router = express.Router()
 
+/**
+ * requires : creator and title
+ */
+router.get('/add-group', async (req, res) => {
+    try {
+        const result = await client.query(`SELECT username FROM users`)
+        const usernames = []
+        for (var i = 0; i < result.rows.length(); ++i){
+            usernames[i] = result.rows[i].username;
+        }
+        res.send(usernames)
+    }
+    catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
 router.post('/add-group', async(req, res) => {
     try {
         const myUser = req.body.username
