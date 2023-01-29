@@ -16,6 +16,7 @@ const ProfilePic = ({ name, id }) => {
         getData();
     }, []);
     return (
+        
         <div className='avatar'>
             <Avatar
                 src={imgs[name]}
