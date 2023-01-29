@@ -33,7 +33,6 @@ const SignInPage = ({ setPage, setUser, setGroups }) => {
             "https://group-sync.onrender.com/authenticate",
             { username: username, password: password }
         );
-        console.log(res.data);
         if (res.data === "User cannot be found") {
             setError(true);
         } else if (res.data === "Cannot Authenticate") {

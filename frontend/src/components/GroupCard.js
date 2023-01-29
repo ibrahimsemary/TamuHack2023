@@ -40,9 +40,7 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups,setPage, setSele
         p: 4,
     };
 
-    const popUp = (e) => {
-        return <div>pop up</div>;
-    };
+
 
     const displayAvatars = () => {
         return usernames.map((name) => {
@@ -62,14 +60,12 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups,setPage, setSele
         });
     };
     const deleteGroup = async () => {
-        console.log(id);
         const res = await axios.post(
             "https://group-sync.onrender.com/remove-group",
             {
                 groupsid: id,
             }
         );
-        console.log(res);
         const res2 = await axios.get(
             `https://group-sync.onrender.com/get-groups/${curr_user}`
         );

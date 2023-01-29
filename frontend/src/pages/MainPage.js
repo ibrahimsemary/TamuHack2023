@@ -13,10 +13,10 @@ const MainPage = ({ allUsers, curr_user, groups, setGroups,setPage, setSelectedG
     const displaySubGroup = () => {
         if (active === 0) {
             const displayGroups = () => {
-                console.log(groups);
                 if (groups.length === 0) {
                     return <div className='ui loader'>Loading</div>;
                 }
+                console.log(groups)
                 return groups.map((group) => {
                     return (
                         <div className='card-on-main'>

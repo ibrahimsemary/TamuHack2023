@@ -25,14 +25,6 @@ const AddGroups = ({ users, setUsers, allUsers, curr_user, setGroups }) => {
     const [groupName, setGroupName] = useState("");
 
     const createGroup = async () => {
-        const x = {
-            creator: curr_user,
-            title: groupName,
-            description: "",
-            usernames: users,
-        };
-        console.log(x)
-
         const res = await axios.post(
             "https://group-sync.onrender.com/add-group",
             {
@@ -48,7 +40,6 @@ const AddGroups = ({ users, setUsers, allUsers, curr_user, setGroups }) => {
             `https://group-sync.onrender.com/get-groups/${curr_user}`
         );
         setGroups(res2.data);
-        console.log(res2)
         setModal(false);
     };
     return (
