@@ -50,6 +50,9 @@
 .twenty-five {
     width: 25%;
 }
+.fifty {
+    width: 75%;
+}
 .sidebar-container {
     width: 100%;
     height: 100%;
@@ -109,4 +112,11 @@
     margin: 5%;
 }
 .main-page-container {
+}
+.event-container{
+    background-color:gainsboro;
+    color: black;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 10px;
 }

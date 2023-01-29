@@ -14,6 +14,8 @@ import Button from "@mui/material/Button";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import InputBox from "../components/InputBox";
 import axios from "axios";
+import PersonalEvents from "../components/PersonalEvents";
+import dayjs from "dayjs";
 
 const Calendar = ({ curr_user }) => {
     const [eventDate, setEventDate] = useState(null);
@@ -21,6 +23,7 @@ const Calendar = ({ curr_user }) => {
     const [endTime, setEndTime] = useState(null);
     const [modal, setModal] = useState(false);
     const [eventName, setEventName] = useState("");
+    const [events, setEvents] = useState([]);
     console.log(curr_user);
     const createEvent = async () => {
         if (eventDate && startTime && endTime && eventName) {
@@ -33,7 +36,7 @@ const Calendar = ({ curr_user }) => {
                 date: eventDate.format("YYYY-MM-DD"),
                 usernames: [],
             };
-            console.log(x)
+            console.log(x);
             const res = await axios.post(
                 "https://group-sync.onrender.com/add-event",
                 {
@@ -42,11 +45,18 @@ const Calendar = ({ curr_user }) => {
                     end_time: endTime.format("HH:mm:ss"),
                     description: "",
                     title: eventName,
-                    date: eventDate.format("MM-DD-YYYY"),
+                    date: eventDate.format("YYYY-MM-DD"),
                     usernames: null,
                 }
             );
             console.log(res);
+
+            const curr_date = dayjs().format("YYYY-MM-DD");
+            const res1 = await axios.get(
+                `https://group-sync.onrender.com/get-schedule/${curr_user}/${curr_date}`
+            );
+            console.log(res1.data);
+            setEvents(res1.data);
             setModal(false);
         }
     };
@@ -68,6 +78,20 @@ const Calendar = ({ curr_user }) => {
             <Button onClick={() => setModal(true)} size='large'>
                 Create New Event
             </Button>
+
+            <br />
+            <Header title={"Today"} />
+            <br />
+
+            <div className='personal-events-container'>
+                <div className='my-events'>
+                    <PersonalEvents
+                        curr_user={curr_user}
+                        events={events}
+                        setEvents={setEvents}
+                    />
+                </div>
+            </div>
 
             <Modal
                 aria-labelledby='transition-modal-title'
