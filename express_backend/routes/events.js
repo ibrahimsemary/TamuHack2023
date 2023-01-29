@@ -15,10 +15,59 @@ router.get('/event/:username', async (req, res) => {
         for (var i = 0; i < result.rows.length; ++i){
             events[i] = new Array(4)
             events[i][0] = result.rows[i].creator;
-            events[i][1] = result.rows[i].start_time;
-            events[i][2] = result.rows[i].end_time;
-            events[i][3] = result.rows[i].description;
+            events[i][1] = result.rows[i].date;
+            events[i][2] = result.rows[i].start_time;
+            events[i][3] = result.rows[i].end_time;
+            events[i][4] = result.rows[i].description;
+            events[i][5] = result.rows[i].title;
         }
+        res.send(events)
+    }
+    catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
+router.get('/event/id/:eventid', async (req, res) => {
+    try {
+        const { eventid } = req.params;
+        const result = await client.query(`SELECT * FROM event_users NATURAL JOIN events WHERE eventid = '${eventid}'`)
+        console.log(result)
+        const events = []
+        events[0] = new Array(5)
+        events[0][0] = result.rows[0].creator;
+        events[0][1] = result.rows[0].date;
+        events[0][2] = result.rows[0].start_time;
+        events[0][3] = result.rows[0].end_time;
+        events[0][4] = result.rows[0].description;
+        events[0][5] = result.rows[0].title;
+        events[1] = new Array(result.rows.length)
+        for (var i = 0; i < result.rows.length; ++i){
+            events[1][i] = result.rows[i].username;
+        }
+        res.send(events)
+    }
+    catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
+router.get('/event/date/:date', async (req, res) => {
+    try {
+        const { startdate } = req.params;
+        const result = await client.query(`SELECT * FROM event_users NATURAL JOIN events WHERE start_time LIKE '{%${startdate}%}'`)
+        console.log(result)
+        const events = []
+        events[0] = new Array(5)
+        // events[0][0] = result.rows[0].creator;
+        // events[0][1] = result.rows[0].start_time;
+        // events[0][2] = result.rows[0].end_time;
+        // events[0][3] = result.rows[0].description;
+        // events[0][4] = result.rows[0].title;
+        // events[1] = new Array(result.rows.length)
+        // for (var i = 0; i < result.rows.length; ++i){
+        //     events[1][i] = result.rows[i].username;
+        // }
         res.send(events)
     }
     catch (err) {
@@ -66,6 +115,14 @@ router.post('/update-event', async(req, res) => {
                 }
             });
         }
+        var date = req.body.date
+        if (date != "") {
+            client.query(`UPDATE events SET date = '${date}' WHERE eventid = '${eventid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a time stamp")
+                }
+            });
+        }
         var end_time = req.body.end_time
         if (end_time != "") {
             client.query(`UPDATE events SET end_time = '${end_time}' WHERE eventid = '${eventid}'`, function (err, result) {
@@ -102,19 +159,16 @@ router.post('/add-event', async(req, res) => {
     try {
         const usernames = req.body.usernames
         var description = req.body.description
-        var start_time = req.body.start_time
+        var start_time =req.body.start_time
         var end_time = req.body.end_time
-        start_time = await client.query(`SELECT timestamp '${start_time}' + interval '0 hours'`)
-        var name = start_time.fields
         console.log(start_time)
         if (description === "") {
             description = null;
         }
-        client.query(`INSERT INTO events (creator, start_time, end_time, description, title) 
-                    VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}')`);
+        client.query(`INSERT INTO events (creator, start_time, end_time, description, title, date) 
+                    VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}', '${req.body.date}')`);
         const result = await client.query(`SELECT max(eventid) FROM events`)
         const id = result.rows[0].max
-        client.query(`SELECT timestamp '${end_time}' + interval '6 hours' FROM events WHERE eventid = '${id}'`)
         await client.query(`INSERT INTO event_users (eventid, username) 
                                 VALUES ('${id}','${req.body.creator}')`)
         for (let i = 0; i < usernames.length; ++i){
