@@ -13,7 +13,7 @@ router.get('/getusers', async (req, res) => {
     try {
         const result = await client.query(`SELECT username FROM users`)
         const usernames = []
-        for (var i = 0; i < result.rows.length(); ++i){
+        for (var i = 0; i < result.rows.length; ++i){
             usernames[i] = result.rows[i].username;
         }
         res.send(usernames)
@@ -62,6 +62,20 @@ router.post('/add-user-group', async(req, res) => {
         res.send("User cannot be found");
     }
 })
+
+
+router.get('/get-groups/:username', async(req, res) => {
+    try {
+        const {username} = req.params;
+        const result = client.query(`SELECT * FROM groups_users JOIN ON groups.id = groups_users.groupsid groups WHERE username = '${username}' `)
+        console.log(result.rows);
+        res.send("");
+
+    } catch (err) {
+        console.log(err.message);
+        res.send(err.message);
+    }
+});
 
 
 module.exports = router
