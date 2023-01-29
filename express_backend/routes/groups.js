@@ -51,8 +51,6 @@ router.post('/add-group', async(req, res) => {
                                 VALUES ('${myUser}','${title}','${description}')`)
         const result = await client.query(`SELECT max(id) FROM groups`)
         const id = result.rows[0].max
-        await client.query(`INSERT INTO groups_users (groupsid, username) 
-                                VALUES ('${id}','${myUser}')`)
         for (let i = 0; i < usernames.length; ++i){
             await client.query(`INSERT INTO groups_users (groupsid, username) 
                                 VALUES ('${id}','${usernames[i]}')`)
@@ -113,6 +111,22 @@ router.get('/get-user-from-groupid/:groupid', async(req, res) => {
     } catch (err) {
         console.log(err.message);
         res.send(err.message);
+    }
+})
+
+router.post('/remove-user-group', async(req, res) => {
+    try {
+        const myUser = req.body.username
+        const groupsid = req.body.groupsid
+        client.query(`DELETE FROM groups_users WHERE groupsid = '${groupsid}' AND username = '${myUser}'`, function (err, result) {
+                                    if (err) {
+                                        res.send("No such event or user")
+                                    }
+                                });
+        res.send((groupsid))
+    } catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
     }
 })
 

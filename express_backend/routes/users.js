@@ -32,5 +32,55 @@ router.get('/get-user-data/:username', async(req, res) =>  {
     }
 });
 
+router.post('/update-user', async(req, res) => {
+    try {
+        const userid = req.body.userid
+        var email = req.body.creator
+        if (creator != "") {
+            client.query(`UPDATE users SET email = '${email}' WHERE userid = '${userid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a email")
+                }
+            });
+        }
+        var username = req.body.username
+        if (username != "") {
+            client.query(`UPDATE users SET username = '${username}' WHERE userid = '${userid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a username")
+                }
+            });
+        }
+        var first_name = req.body.first_name
+        if (creator != "") {
+            client.query(`UPDATE users SET first_name = '${first_name}' WHERE userid = '${userid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a first name")
+                }
+            });
+        }
+        var last_name = req.body.last_name
+        if (username != "") {
+            client.query(`UPDATE users SET last_name = '${last_name}' WHERE userid = '${userid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a last name")
+                }
+            });
+        }
+        var password= req.body.password
+        if (username != "") {
+            client.query(`UPDATE users SET password = '${password}' WHERE userid = '${userid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a password")
+                }
+            });
+        }
+        res.send((eventid).toString())
+    } catch (err) {
+        console.log(err.message);
+        res.send("Error");
+    }
+})
+
 
 module.exports = router

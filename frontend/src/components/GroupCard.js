@@ -13,7 +13,20 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ProfilePic from "./ProfilePic"
 
-const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
+
+const GroupCard = ({ id, usernames, title, curr_user, setGroups,setPage, setSelectedGroup }) => {
+    // const [imgs, setImgs] = useState({});
+
+    // const getData = async () => {
+    //     const res = await axios.get(
+    //         `https://group-sync.onrender.com/get-user-from-groupid/${id}`
+    //     );
+    //     console.log(res);
+    //     setImgs(res.data);
+    // };
+    // useEffect(() => {
+    //     getData();
+    // }, []);
     const [modal, setModal] = useState(false);
     const style = {
         position: "absolute",
@@ -60,14 +73,18 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
         setModal(false);
     };
     return (
-        <div className='card-container'>
+        <div className='card-container' >
             <div className='delete-button'>
                 <IconButton onClick={() => setModal(true)}>
                     {" "}
                     <DeleteIcon />
                 </IconButton>
             </div>
-            <div className='to-center'>
+            <div className='to-center' onClick = {
+            ()=>
+            {setPage("GroupPage");
+            setSelectedGroup(id)
+            }}>
                 <h3 className='card-title'>{title}</h3>
             </div>
             <div className='avatar-container'>{displayAvatars()}</div>
