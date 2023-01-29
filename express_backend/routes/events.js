@@ -35,7 +35,7 @@ router.get('/event/id/:eventid', async (req, res) => {
         const result = await client.query(`SELECT * FROM event_users NATURAL JOIN events WHERE eventid = '${eventid}'`)
         console.log(result)
         const events = []
-        events[0] = new Array(5)
+        events[0] = new Array(6)
         events[0][0] = result.rows[0].creator;
         events[0][1] = result.rows[0].date;
         events[0][2] = result.rows[0].start_time;
@@ -45,6 +45,44 @@ router.get('/event/id/:eventid', async (req, res) => {
         events[1] = new Array(result.rows.length)
         for (var i = 0; i < result.rows.length; ++i){
             events[1][i] = result.rows[i].username;
+        }
+        res.send(events)
+    }
+    catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
+
+router.get('/event/groupsid/:groupsid', async (req, res) => {
+    try {
+        const { groupsid } = req.params;
+        const result = await client.query(`SELECT * FROM event_users NATURAL JOIN events WHERE groupsid = '${groupsid}'`)
+        console.log(result)
+        const events = []
+        var currentEvent = -1;
+        var count = -1;
+        var usernameCount = 0;
+        for (var i = 0; i < result.rows.length; ++i){
+            if (currentEvent == result.rows[i].eventid) {
+                events[count][7][i] = result.rows[i].username;
+                usernameCount += 1
+            }
+            else {
+                count += 1;
+                events[count] = new Array(6)
+                events[count][0] = result.rows[i].creator;
+                events[count][1] = result.rows[i].date;
+                events[count][2] = result.rows[i].start_time;
+                events[count][3] = result.rows[i].end_time;
+                events[count][4] = result.rows[i].description;
+                events[count][5] = result.rows[i].title;
+                events[count][6] = result.rows[i].eventid;
+                usernameCount = 1
+                events[count][7] = new Array()
+                events[count][7][0] = result.rows[i].username
+                currentEvent = result.rows[i].eventid
+            }
         }
         res.send(events)
     }
