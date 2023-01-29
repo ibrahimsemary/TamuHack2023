@@ -101,4 +101,19 @@ router.get('/get-groups/:username', async(req, res) => {
 });
 
 
+router.get('/get-user-from-groupid/:groupid', async(req, res) => {
+    try {
+        const {groupid} = req.params
+        result = await client.query(`SELECT username, img FROM groups_users NATURAL JOIN users WHERE groupsid = ${groupid}`)
+        var data = {};
+        for(var i=0; i<result.rows.length; i++){
+            data[result.rows[i].username] =  result.rows[i].img
+        }
+        res.send(data)
+    } catch (err) {
+        console.log(err.message);
+        res.send(err.message);
+    }
+})
+
 module.exports = router
