@@ -118,5 +118,6 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
             </Modal>
         </div>
     );
-};
+}
+
 export default GroupCard;
