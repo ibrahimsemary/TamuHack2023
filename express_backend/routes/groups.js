@@ -54,7 +54,7 @@ router.post('/add-user-group', async(req, res) => {
         const groupsid = req.body.groupsid
         await client.query(`INSERT INTO groups_users (groupsid, username) 
                                 VALUES ('${groupsid}','${myUser}')`)
-        const result = await client.query(`SELECT max(id) FROM groups`)
+        const result = await client.query(`SELECT max(id) FROM groups_users`)
         const id = result.rows[0].max
         res.send((id).toString())
     } catch (err) {
