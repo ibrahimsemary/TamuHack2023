@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import MainPage from "./pages/MainPage";
+import GroupPage from "./pages/GroupPage";
 import axios from "axios";
 
 const App = () => {
@@ -9,6 +10,8 @@ const App = () => {
     const [user, setUser] = useState(null);
     const [allUsers, setAllUsers] = useState([]);
     const [groups, setGroups] = useState([]);
+    const [selectedGroup, setSelectedGroup] = useState(null)
+
 
     const callApi = async () => {
         const res = await axios.get("https://group-sync.onrender.com/getusers");
@@ -43,8 +46,14 @@ const App = () => {
                 curr_user={user}
                 groups={groups}
                 setGroups={setGroups}
+                setPage = {setPage}
+                setSelectedGroup = {setSelectedGroup}
             />
         );
+    }else if(page === "GroupPage"){
+        return(
+            <GroupPage groupId = {selectedGroup} curr_user = {user} setPage = {setPage}/>
+        )
     }
 };
 
