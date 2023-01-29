@@ -5,62 +5,44 @@ import GroupCard from "../components/GroupCard";
 import { useState } from "react";
 import AddGroups from "../components/AddGroups";
 
-const MainPage = () => {
+const MainPage = ({ allUsers, curr_user, groups, setGroups }) => {
     const sidebarList = ["Groups", "Calendar", "Profile"];
     const [active, setActive] = useState(0);
+    const [users, setUsers] = useState([]);
 
     const displaySubGroup = () => {
         if (active === 0) {
+            const displayGroups = () => {
+                console.log(groups);
+                if (groups.length === 0) {
+                    return <div className='ui loader'>Loading</div>;
+                }
+                return groups.map((group) => {
+                    return (
+                        <div className='card-on-main'>
+                            <div className='to-center'>
+                                <GroupCard
+                                    usernames={group.usernames}
+                                    title={group.title}
+                                    curr_user={curr_user}
+                                />
+                            </div>
+                        </div>
+                    );
+                });
+            };
             return (
                 <div className='main-card-container'>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
-                    <div className='card-on-main'>
-                        <div className='to-center'>
-                            <GroupCard />
-                        </div>
-                    </div>
+                    {displayGroups()}
                     <div className='to-center'>
                         {" "}
-                        <AddGroups />
+                        <AddGroups
+                            setGroups={setGroups}
+                            curr_user={curr_user}
+                            allUsers={allUsers}
+                            setUsers={setUsers}
+                            users={users}
+                        />
                     </div>
                 </div>
             );
