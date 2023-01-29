@@ -7,7 +7,7 @@ client.connect();
 const router = express.Router()
 
 /**
- * requires : creator and title
+ * requires : none
  */
 router.get('/getusers', async (req, res) => {
     try {
@@ -82,10 +82,18 @@ router.post('/add-user-group', async(req, res) => {
 router.get('/get-groups/:username', async(req, res) => {
     try {
         const {username} = req.params;
-        const result = client.query(`SELECT * FROM groups_users JOIN ON groups.id = groups_users.groupsid groups WHERE username = '${username}' `)
-        console.log(result.rows);
-        res.send("");
-
+        const result1 = await client.query(`SELECT groups.id, groups.title, groups.creator, groups.description FROM groups_users JOIN groups ON groups.id = groups_users.groupsid  WHERE username = '${username}' `);
+        
+        let result2;
+        let data = result1.rows;
+        for(var i=0; i<result1.rows.length; i++){
+            result2 = await client.query(`SELECT username from groups_users where groupsid = ${result1.rows[i].id}`)
+            data[i].usernames = []
+            for(var j=0; j<result2.rows.length; j++){
+                data[i].usernames.push(result2.rows[j].username)
+            }
+        }
+        res.send(data)
     } catch (err) {
         console.log(err.message);
         res.send(err.message);

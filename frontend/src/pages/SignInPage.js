@@ -7,10 +7,9 @@ import "./SignInPage.css";
 import { TextField } from "@mui/material";
 import axios from "axios";
 
-const SignInPage = ({ setPage, setUser }) => {
+const SignInPage = ({ setPage, setUser, setGroups }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    
 
     const [error, setError] = useState(false);
 
@@ -37,13 +36,15 @@ const SignInPage = ({ setPage, setUser }) => {
         console.log(res.data);
         if (res.data === "User cannot be found") {
             setError(true);
-        }
-        else if (res.data === "Cannot Authenticate"){
-            setError(true)
-        }
-        else{
+        } else if (res.data === "Cannot Authenticate") {
+            setError(true);
+        } else {
+            const res2 = await axios.get(
+                `https://group-sync.onrender.com/get-groups/${res.data}`
+            );
+            setGroups(res2.data);
             setUser(res.data);
-            setPage("MainPage")
+            setPage("MainPage");
         }
     };
 
