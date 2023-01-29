@@ -110,7 +110,7 @@ router.get('/whos-busy/:groupsid/:date/:duration', async(req, res) => {
             data[i].push( (end_vals[0]*60 +end_vals[1]) *60 + end_vals[2])
         }
         let whos_busy = {}
-        for(var potential_start = 8*60*60; potential_start<24*60*60; potential_start += 30*60){
+        for(var potential_start = 0; potential_start<24*60*60; potential_start += 30*60){
             whos_busy[potential_start] = []
             for(var i=0; i<data.length; i++){
                 let potential_end = potential_start + duration;
