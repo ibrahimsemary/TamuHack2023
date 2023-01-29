@@ -104,17 +104,17 @@ router.post('/add-event', async(req, res) => {
         var description = req.body.description
         var start_time = req.body.start_time
         var end_time = req.body.end_time
+        start_time = await client.query(`SELECT timestamp '${start_time}' + interval '0 hours'`)
+        var name = start_time.fields
         console.log(start_time)
         if (description === "") {
             description = null;
         }
-        client.query(`SELECT DATEADD(hour, 6, '${start_time}') AS DateAdd FROM `)
-        client.query(`SELECT DATEADD(hour, 6, '${end_time}') AS DateAdd`)
-        console.log(start_time)
         client.query(`INSERT INTO events (creator, start_time, end_time, description, title) 
                     VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}')`);
         const result = await client.query(`SELECT max(eventid) FROM events`)
         const id = result.rows[0].max
+        client.query(`SELECT timestamp '${end_time}' + interval '6 hours' FROM events WHERE eventid = '${id}'`)
         await client.query(`INSERT INTO event_users (eventid, username) 
                                 VALUES ('${id}','${req.body.creator}')`)
         for (let i = 0; i < usernames.length; ++i){
