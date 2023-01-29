@@ -23,6 +23,21 @@ router.get('/getusers', async (req, res) => {
         res.send("User cannot be found");
     }
 })
+router.post('/remove-group', async(req, res) => {
+    try {
+        const groupsid = req.body.groupsid
+        client.query(`DELETE FROM groups WHERE groupsid = '${groupsid}'`, function (err, result) {
+            if (err) {
+                res.send("Group is not made")
+            }
+        });
+        await client.query(`DELETE FROM groups_users WHERE groupsid = '${groupsid}'`);
+        res.send((groupsid).toString())
+    } catch (err) {
+        console.log(err.message);
+        res.send("Event is not made");
+    }
+})
 router.post('/add-group', async(req, res) => {
     try {
         const myUser = req.body.creator

@@ -6,10 +6,6 @@ var conString = "postgresql://postgres:BGSMnZeKu6JGykthxCsB@containers-us-west-1
 var client = new pg.Client(conString);
 client.connect();
 
-/**
- * requires : creator, start_time, end_time, description
- * UNFINISHED
- */
 router.get('/event/:username', async (req, res) => {
     try {
         const { username } = req.params;
@@ -30,15 +26,93 @@ router.get('/event/:username', async (req, res) => {
         res.send("User cannot be found");
     }
 })
+/**
+ * requires : creator, start_time, end_time, description
+ *
+ */
+router.post('/remove-event', async(req, res) => {
+    try {
+        const eventid = req.body.eventid
+        client.query(`DELETE FROM events WHERE eventid = '${eventid}'`, function (err, result) {
+            if (err) {
+                res.send("Event is not made")
+            }
+        });
+        await client.query(`DELETE FROM event_users WHERE eventid = '${eventid}'`);
+        res.send((eventid).toString())
+    } catch (err) {
+        console.log(err.message);
+        res.send("Event is not made");
+    }
+})
+
+
+router.post('/update-event', async(req, res) => {
+    try {
+        const eventid = req.body.eventid
+        var creator = req.body.creator
+        if (creator != "") {
+            client.query(`UPDATE events SET creator = '${creator}' WHERE eventid = '${eventid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a username")
+                }
+            });
+        }
+        var start_time = req.body.start_time
+        if (start_time != "") {
+            client.query(`UPDATE events SET start_time = '${start_time}' WHERE eventid = '${eventid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a time stamp")
+                }
+            });
+        }
+        var end_time = req.body.end_time
+        if (end_time != "") {
+            client.query(`UPDATE events SET end_time = '${end_time}' WHERE eventid = '${eventid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a time stamp")
+                }
+            });
+        }
+        var description = req.body.description
+        if (description != "") {
+            client.query(`UPDATE events SET description = '${description}' WHERE eventid = '${eventid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a time stamp")
+                }
+            });
+        }
+        var title = req.body.title
+        if (title != "") {
+            client.query(`UPDATE events SET title = '${title}' WHERE eventid = '${eventid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a time stamp")
+                }
+            });
+        }
+        res.send((eventid).toString())
+    } catch (err) {
+        console.log(err.message);
+        res.send("Error");
+    }
+})
+
+
 router.post('/add-event', async(req, res) => {
     try {
         const usernames = req.body.usernames
         var description = req.body.description
+        var start_time = req.body.start_time
+        var end_time = req.body.end_time
+        console.log(start_time)
         if (description === "") {
             description = null;
         }
-        await client.query(`INSERT INTO events (creator, start_time, end_time, description) 
-                    VALUES ('${req.body.creator}', '${req.body.start_time}', '${req.body.end_time}', '${description}')`);
+        client.query(`SELECT DATEADD(hour, 6, '${start_time}') AS DateAdd FROM `)
+        client.query(`SELECT DATEADD(hour, 6, '${end_time}') AS DateAdd`)
+        console.log(start_time)
+        client.query(`INSERT INTO events (creator, start_time, end_time, description, title) 
+                    VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}')`);
         const result = await client.query(`SELECT max(eventid) FROM events`)
         const id = result.rows[0].max
         await client.query(`INSERT INTO event_users (eventid, username) 
@@ -57,8 +131,12 @@ router.post('/add-user-event', async(req, res) => {
     try {
         const myUser = req.body.username
         const eventid = req.body.eventid
-        await client.query(`INSERT INTO event_users (eventid, username) 
-                                VALUES ('${eventid}','${myUser}')`)
+        client.query(`INSERT INTO event_users (eventid, username) 
+                                VALUES ('${eventid}','${myUser}')`, function (err, result) {
+                                    if (err) {
+                                        res.send("No such event or user")
+                                    }
+                                });
         const result = await client.query(`SELECT max(id) FROM event_users`)
         const id = result.rows[0].max
         res.send((id).toString())
