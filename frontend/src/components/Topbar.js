@@ -99,7 +99,7 @@ const TopBar = ({title}) => {
                 textDecoration: 'none',
               }}
             >
-              Baby titties
+              groupSync
             </Typography>
             
             <Typography

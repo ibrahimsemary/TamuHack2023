@@ -22,9 +22,11 @@ const MainPage = ({ allUsers, curr_user, groups, setGroups }) => {
                         <div className='card-on-main'>
                             <div className='to-center'>
                                 <GroupCard
+                                    id = {group.id}
                                     usernames={group.usernames}
                                     title={group.title}
                                     curr_user={curr_user}
+                                    setGroups = {setGroups}
                                 />
                             </div>
                         </div>
@@ -58,7 +60,7 @@ const MainPage = ({ allUsers, curr_user, groups, setGroups }) => {
     return (
         <div className='main-page-container'>
             <div className='top-bar-container'>
-                <Topbar title='Welcome Back Ibrahim.' />
+                <Topbar title={`Welcome Back ${curr_user.toUpperCase()}.`} />
             </div>
             <br />
             <div className='sidebar-card-container'>
