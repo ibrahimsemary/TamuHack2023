@@ -191,21 +191,38 @@ router.post('/add-event', async(req, res) => {
         client.query(Q);
         const result = await client.query(`SELECT max(eventid) FROM events`)
         const id = result.rows[0].max
-        await client.query(`INSERT INTO event_users (eventid, username) 
-                                VALUES ('${id}','${req.body.creator}')`)
+        await client.query(`INSERT INTO event_users (eventid, username, accepted) 
+                                VALUES ('${id}','${req.body.creator}', 'true')`)
         if (groupsid != 0) {
             const usernames = await client.query(`SELECT username FROM groups_users WHERE groupsid = '${req.body.groupsid}'`)
             console.log(usernames)
             for (let i = 1; i < usernames.rows.length; ++i) {
                 console.log(usernames.rows[i].username)
-                await client.query(`INSERT INTO event_users (eventid, username) 
-                                VALUES ('${id}','${usernames.rows[i].username}')`)
+                await client.query(`INSERT INTO event_users (eventid, username, accepted) 
+                                VALUES ('${id}','${usernames.rows[i].username}', 'false)`)
             }
         }
         res.send((id).toString())
     } catch (err) {
         console.log(err.message);
         res.send(err.message);
+    }
+})
+
+router.post('/accept-event', async(req, res) => {
+    try {
+        const myUser = req.body.username
+        const eventid = req.body.eventid
+        client.query(`UPDATE event_users SET accepted = 'true' WHERE eventid = '${eventid}' AND username = '${myUser}'`, function (err, result) {
+                                    if (err) {
+                                        res.send("No such event or user")
+                                    }
+        });
+        res.send((eventid).toString())
+    }
+    catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
     }
 })
 router.post('/add-user-event', async(req, res) => {
