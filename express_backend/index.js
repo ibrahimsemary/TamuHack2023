@@ -1,9 +1,13 @@
 const express = require('express')
 const app = express()
+const dotenv = require('dotenv').config();
+const cors = require('cors');
 const pg = require('pg')
-app.use(express.json())
 
-const PORT = 4000
+app.use(express.json());
+app.use(cors());
+
+const PORT = process.env.PORT || 4000;
 
 var conString = "postgresql://postgres:BGSMnZeKu6JGykthxCsB@containers-us-west-188.railway.app:5471/railway"
 var client = new pg.Client(conString);
@@ -39,8 +43,17 @@ app.post('/authenticate', async(req, res) => {
     }
 })
 
-const exampleRoute = require('./routes/exRoute');
+const exampleRoute = require('./routes/exRoute.js');
 app.use('/ex/', exampleRoute);
+
+const events = require('./routes/events.js');
+app.use('/', events);
+
+const groups = require('./routes/groups.js');
+app.use('/', groups);
+
+const users = require('./routes/users.js');
+app.use('/', users);
 
 
 app.listen(PORT, function () {
