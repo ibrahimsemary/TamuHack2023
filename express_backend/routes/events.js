@@ -174,12 +174,21 @@ router.post('/add-user-event', async(req, res) => {
     try {
         const myUser = req.body.username
         const eventid = req.body.eventid
+        const groupsid = req.body.groupsid        
         client.query(`INSERT INTO event_users (eventid, username) 
                                 VALUES ('${eventid}','${myUser}')`, function (err, result) {
                                     if (err) {
                                         res.send("No such event or user")
                                     }
-                                });
+        });
+        const groupResult = await client.query(`SELECT groupsid FROM events WHERE eventid = '${eventid}'`)
+        if (groupResult.rows[0].groupsid == null) {
+            client.query(`UPDATE events SET groupsid = '${groupsid}' WHERE eventid = '${eventid}'`, function (err, result) {
+                if (err) {
+                    res.send("Value entered is not a group")
+                }
+            });
+        }
         const result = await client.query(`SELECT max(id) FROM event_users`)
         const id = result.rows[0].max
         res.send((id).toString())
