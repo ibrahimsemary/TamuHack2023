@@ -6,9 +6,25 @@ client.connect();
 
 const router = express.Router()
 
+/**
+ * requires : creator and title
+ */
+router.get('/getusers', async (req, res) => {
+    try {
+        const result = await client.query(`SELECT username FROM users`)
+        const usernames = []
+        for (var i = 0; i < result.rows.length(); ++i){
+            usernames[i] = result.rows[i].username;
+        }
+        res.send(usernames)
+    }
+    catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
 router.post('/add-group', async(req, res) => {
     try {
-        console.log(req.body)
         const myUser = req.body.username
         const title = req.body.title
         var description = req.body.description
@@ -21,7 +37,18 @@ router.post('/add-group', async(req, res) => {
         const id = result.rows[0].max
         await client.query(`INSERT INTO groups_users (groupsid, username) 
                                 VALUES ('${id}','${myUser}')`)
-        console.log(result)
+        res.send((id).toString())
+    } catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
+router.post('/add-user-group', async(req, res) => {
+    try {
+        const myUser = req.body.username
+        const groupid = req.body.groupid
+        await client.query(`INSERT INTO groups_users (groupsid, username) 
+                                VALUES ('${groupid}','${myUser}')`)
         res.send((id).toString())
     } catch (err) {
         console.log(err.message);

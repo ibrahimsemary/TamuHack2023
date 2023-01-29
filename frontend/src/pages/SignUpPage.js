@@ -7,23 +7,35 @@ const SignUpPage = ({ setPage }) => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [error, setError] = useState(false);
+    const [username, setUsername] = useState("");
 
     const displayError = () => {
         if (error) {
             return (
                 <div className='to-center'>
                     {" "}
-                    <div className='error-message'>
-                        *Incorrect username or password
-                    </div>
+                    <div className='error-message'>*Input All Fields</div>
                 </div>
             );
         } else {
             return <br />;
         }
     };
-    const SignUp = () => {
-        setError(true);
+    const SignUp = async () => {
+        if (firstName && lastName && email) {
+            // const res = await axiost.post(
+            //     "https://group-sync.onrender.com/authenticate",
+            //     {
+            //         username: username,
+            //         password: password,
+            //         first_name: firstName,
+            //         last_name: lastName,
+            //         username: username,
+            //     }
+            // );
+        } else {
+            setError(true);
+        }
     };
     return (
         <div className='to-center'>
@@ -58,6 +70,15 @@ const SignUpPage = ({ setPage }) => {
                             placeholder={"abc@gmail.com"}
                             text={email}
                             setText={setEmail}
+                        />
+                    </div>
+                    <br />
+                    <div>
+                        <InputBox
+                            title={"Username"}
+                            placeholder={"Mike Tyson"}
+                            text={username}
+                            setText={setUsername}
                         />
                     </div>
                     <br />
