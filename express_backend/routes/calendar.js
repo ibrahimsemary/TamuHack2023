@@ -13,7 +13,7 @@ router.get('/get-schedule/:username/:date', async(req, res) =>  {
     try {
         const { username } = req.params
         const {date} = req.params
-        const result = await client.query(`SELECT * FROM users WHERE username = '${username}' date = '${date}' `);
+        const result = await client.query(`SELECT * FROM users WHERE username = '${username}' AND date = '${date}' `);
         res.send(result.rows[0]);
     } catch (err) {
         console.log(err.message);
