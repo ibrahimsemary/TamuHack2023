@@ -106,21 +106,23 @@ router.get('/whos-busy/:groupsid/:date/:duration', async(req, res) => {
             data[i].push(result.rows[i].username)
             let start_vals = result.rows[i].start_time.split(":")
             let end_vals = result.rows[i].end_time.split(":")
-            data[i].push( (start_vals[0]*60 +start_vals[1]) *60 + start_vals[2])
-            data[i].push( (end_vals[0]*60 +end_vals[1]) *60 + end_vals[2])
+            data[i].push( (parseInt(start_vals[0])*60 +parseInt(start_vals[1])) *60 + parseInt(start_vals[2]))
+            data[i].push( (parseInt(end_vals[0])*60 +parseInt(end_vals[1])) *60 + parseInt(end_vals[2]))
         }
+        console.log(data)
         let whos_busy = {}
-        for(var potential_start = 8*60*60; potential_start<23.5*60*60; potential_start += 30*60){
+        for(var potential_start = 8*60*60; potential_start<23.5*60*60; potential_start += parseInt(duration)){
             whos_busy[potential_start] = []
             for(var i=0; i<data.length; i++){
-                let potential_end = potential_start + duration;
-                if(potential_start < data[i][1] && data[i][1] < potential_end ){
+                let potential_end = potential_start + parseInt(duration);
+                if((data[i][1] < potential_start) && (potential_start < data[i][2] )){
                     whos_busy[potential_start].push(data[i][0]);
-                } else if(potential_start < data[i][2] && data[i][2] < potential_end){
+                } else if((data[i][1] < potential_end) && (potential_end < data[i][2])){
                     whos_busy[potential_start].push(data[i][0]);
                 }
             }
         }
+        //console.log(whos_busy)
         let whos_busy2 = {}
         for(var key in whos_busy){
             let totalminutes = Math.floor(key/60)
