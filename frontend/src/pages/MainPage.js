@@ -3,7 +3,7 @@ import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
 import GroupCard from "../components/GroupCard";
 import { useState } from "react";
-import AddGroups from "../components/Addgroups";
+import AddGroups from "../components/AddGroups";
 import Calendar from "./Calendar";
 
 const MainPage = ({
