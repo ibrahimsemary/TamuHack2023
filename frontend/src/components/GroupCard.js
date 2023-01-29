@@ -55,7 +55,7 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
                     //     />
                     //     {name}
                     // </div>
-                    ProfilePic(name, id)
+                    <center>{ProfilePic(name, id)}</center>
                 );
             }
         });
