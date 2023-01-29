@@ -11,7 +11,8 @@ client.connect();
  */
 router.post('/create-user', async(req, res) => {
     try {
-        client.query(`INSERT INTO users VALUES ('${username}', '${password}', '${first_name})`)
+        client.query(`INSERT INTO users VALUES ('${req.body.username}', '${req.body.password}', '${req.body.first_name}, '${req.body.last_name}', '${req.body.email}' );`)
+        res.send("success");
     } catch (err) {
         res.send(err.message);
         console.log(err.message);
