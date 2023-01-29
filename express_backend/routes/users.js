@@ -21,5 +21,16 @@ router.post('/create-user', async(req, res) => {
     }
 });
 
+router.get('/get-user-data/:username', async(req, res) =>  {
+    try {
+        const {username} = req.params
+        const result = client.query(`SELECT * FROM users WHERE username = '${username}' `);
+        res.send(result.rows[0]);
+    } catch (err) {
+        console.log(err.message);
+        res.send(err.message);
+    }
+});
+
 
 module.exports = router
