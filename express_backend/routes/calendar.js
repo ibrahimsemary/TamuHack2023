@@ -23,6 +23,7 @@ router.get('/get-schedule/:username/:date', async(req, res) =>  {
             events[i][3] = result.rows[i].end_time;
             events[i][4] = result.rows[i].description;
             events[i][5] = result.rows[i].title;
+            events[i][6] = result.rows[i].eventid;
         }
         res.send(events)
     } catch (err) {
@@ -35,7 +36,7 @@ router.get('/get-group-schedule/:groupsid/:date', async(req, res) =>  {
     try {
         const {groupsid, date} = req.params
         await client.query(`CREATE OR REPLACE VIEW view11 AS SELECT event_users.username, eventid FROM groups_users JOIN event_users ON groups_users.username = event_users.username WHERE groupsid='${groupsid}'`)
-        const result = await client.query(`SELECT username, start_time, end_time FROM view11 JOIN events ON view11.eventid = events.eventid`)
+        const result = await client.query(`SELECT username, start_time, end_time FROM view11 JOIN events ON view11.eventid = events.eventid ORDER BY start_time`)
         res.send(result.rows);
     } catch (err) {
         console.log(err.message);
