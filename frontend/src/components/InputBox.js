@@ -7,7 +7,7 @@ const InputBox = ({ title, text, setText, placeholder, type, fullWidth }) => {
     };
     return (
         <TextField
-            fullWidth
+            fullWidth 
             label={title}
             onChange={(e) => onCh(e)}
             value={text}
