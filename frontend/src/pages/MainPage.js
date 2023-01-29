@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import GroupCard from "../components/GroupCard";
 import { useState } from "react";
 import AddGroups from "../components/AddGroups";
+import Calendars from "./calendar"
 
 const MainPage = ({ allUsers, curr_user, groups, setGroups }) => {
     const sidebarList = ["Groups", "Calendar", "Profile"];
@@ -47,7 +48,7 @@ const MainPage = ({ allUsers, curr_user, groups, setGroups }) => {
                 </div>
             );
         } else if (active === 1) {
-            return <div>my Calendar</div>;
+            return <div>{<Calendars/>}</div>;
         } else if (active === 2) {
             return <div>profile</div>;
         } else {
