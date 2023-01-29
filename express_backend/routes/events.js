@@ -52,29 +52,6 @@ router.get('/event/id/:eventid', async (req, res) => {
         res.send("User cannot be found");
     }
 })
-router.get('/event/date/:date', async (req, res) => {
-    try {
-        const { startdate } = req.params;
-        const result = await client.query(`SELECT * FROM event_users NATURAL JOIN events WHERE start_time LIKE '{%${startdate}%}'`)
-        console.log(result)
-        const events = []
-        events[0] = new Array(5)
-        // events[0][0] = result.rows[0].creator;
-        // events[0][1] = result.rows[0].start_time;
-        // events[0][2] = result.rows[0].end_time;
-        // events[0][3] = result.rows[0].description;
-        // events[0][4] = result.rows[0].title;
-        // events[1] = new Array(result.rows.length)
-        // for (var i = 0; i < result.rows.length; ++i){
-        //     events[1][i] = result.rows[i].username;
-        // }
-        res.send(events)
-    }
-    catch (err) {
-        console.log(err.message);
-        res.send("User cannot be found");
-    }
-})
 /**
  * requires : creator, start_time, end_time, description
  *
@@ -161,12 +138,12 @@ router.post('/add-event', async(req, res) => {
         var description = req.body.description
         var start_time =req.body.start_time
         var end_time = req.body.end_time
-        console.log(start_time)
         if (description === "") {
             description = null;
         }
-        client.query(`INSERT INTO events (creator, start_time, end_time, description, title, date) 
-                    VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}', '${req.body.date}')`);
+        const Q = `INSERT INTO events (creator, start_time, end_time, description, title, date) VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}', '${req.body.date}')`
+        console.log(Q);
+        client.query(Q);
         const result = await client.query(`SELECT max(eventid) FROM events`)
         const id = result.rows[0].max
         await client.query(`INSERT INTO event_users (eventid, username) 

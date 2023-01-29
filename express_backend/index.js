@@ -55,6 +55,9 @@ app.use('/', groups);
 const users = require('./routes/users.js');
 app.use('/', users);
 
+const calendar = require('./routes/calendar.js');
+app.use('/', calendar);
+
 
 app.listen(PORT, function () {
     console.log('Server is running on port ' + PORT);
