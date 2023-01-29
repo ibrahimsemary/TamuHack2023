@@ -110,7 +110,7 @@ router.get('/whos-busy/:groupsid/:date/:duration', async(req, res) => {
             data[i].push( (end_vals[0]*60 +end_vals[1]) *60 + end_vals[2])
         }
         let whos_busy = {}
-        for(var potential_start = 0; potential_start<24*60*60; potential_start += 30*60){
+        for(var potential_start = 8*60*60; potential_start<23.5*60*60; potential_start += 30*60){
             whos_busy[potential_start] = []
             for(var i=0; i<data.length; i++){
                 let potential_end = potential_start + duration;
@@ -121,7 +121,20 @@ router.get('/whos-busy/:groupsid/:date/:duration', async(req, res) => {
                 }
             }
         }
-        res.send(whos_busy)
+        let whos_busy2 = {}
+        for(var key in whos_busy){
+            let totalminutes = Math.floor(key/60)
+            let hours = Math.floor(totalminutes/60)
+            let minutes = totalminutes % 60
+            let timeStr = ""
+            if(hours < 10) timeStr += `0${hours}`
+            else timeStr += `${hours}`
+            if(minutes < 10) timeStr += `:0${minutes}`
+            else timeStr += `:${minutes}`
+            whos_busy2[timeStr] = whos_busy[key]
+
+        }
+        res.send(whos_busy2)
 
         //res.send({minLength, minTimes})
 
