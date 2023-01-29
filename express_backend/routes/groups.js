@@ -53,7 +53,7 @@ router.post('/add-group', async(req, res) => {
         const id = result.rows[0].max
         await client.query(`INSERT INTO groups_users (groupsid, username) 
                                 VALUES ('${id}','${myUser}')`)
-        for (let i = 0; i < usernames.length; ++i){
+        for (let i = 1; i < usernames.length; ++i){
             await client.query(`INSERT INTO groups_users (groupsid, username) 
                                 VALUES ('${id}','${usernames[i]}')`)
         }
