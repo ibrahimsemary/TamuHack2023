@@ -3,6 +3,7 @@ import Topbar from "../components/Topbar";
 import Sidebar from "../components/Sidebar";
 import GroupCard from "../components/GroupCard";
 import { useState } from "react";
+import AddGroups from "../components/AddGroups";
 
 const MainPage = () => {
     const sidebarList = ["Groups", "Calendar", "Profile"];
@@ -56,6 +57,10 @@ const MainPage = () => {
                         <div className='to-center'>
                             <GroupCard />
                         </div>
+                    </div>
+                    <div className='to-center'>
+                        {" "}
+                        <AddGroups />
                     </div>
                 </div>
             );

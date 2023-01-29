@@ -4,7 +4,7 @@ import SignUpPage from "./pages/SignUpPage";
 import MainPage from "./pages/MainPage";
 
 const App = () => {
-    const [page, setPage] = useState("SignInPage");
+    const [page, setPage] = useState("MainPage");
     const [user , setUser] = useState(null)
 
     if (page === "SignInPage") {
