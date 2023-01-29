@@ -135,28 +135,39 @@ router.post('/update-event', async(req, res) => {
 
 router.post('/add-event', async(req, res) => {
     try {
-        const usernames = req.body.usernames
+        const groupsid = req.body.groupsid
         var description = req.body.description
         var start_time =req.body.start_time
-        var end_time = req.body.end_time
+        var end_time = req.body.end_time;
+        var Q = ""
         if (description === "") {
             description = null;
         }
-        const Q = `INSERT INTO events (creator, start_time, end_time, description, title, date) VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}', '${req.body.date}')`
+        if(groupsid === 0){
+            Q = `INSERT INTO events (creator, start_time, end_time, description, title, date) VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}', '${req.body.date}')`;
+        }
+        else {
+            Q = `INSERT INTO events (creator, start_time, end_time, description, title, date, groupsid) VALUES ('${req.body.creator}', '${start_time}', '${end_time}', '${description}', '${req.body.title}', '${req.body.date}','${req.body.groupsid}')`;
+        }
         console.log(Q);
         client.query(Q);
         const result = await client.query(`SELECT max(eventid) FROM events`)
         const id = result.rows[0].max
         await client.query(`INSERT INTO event_users (eventid, username) 
                                 VALUES ('${id}','${req.body.creator}')`)
-        for (let i = 0; i < usernames.length; ++i){
-            await client.query(`INSERT INTO event_users (eventid, username) 
-                                VALUES ('${id}','${usernames[i]}')`)
+        if (groupsid != 0) {
+            const usernames = await client.query(`SELECT username FROM groups_users WHERE groupsid = '${req.body.groupsid}'`)
+            console.log(usernames)
+            for (let i = 1; i < usernames.rows.length; ++i) {
+                console.log(usernames.rows[i].username)
+                await client.query(`INSERT INTO event_users (eventid, username) 
+                                VALUES ('${id}','${usernames.rows[i].username}')`)
+            }
         }
         res.send((id).toString())
     } catch (err) {
         console.log(err.message);
-        res.send("User cannot be found");
+        res.send(err.message);
     }
 })
 router.post('/add-user-event', async(req, res) => {
