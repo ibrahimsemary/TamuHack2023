@@ -82,6 +82,7 @@ const AddGroups = ({ users, setUsers, allUsers, curr_user, setGroups }) => {
                             title={"Group Name"}
                             text={groupName}
                             setText={setGroupName}
+                            
                         />
                         <br />
                         <br />
@@ -99,6 +100,7 @@ const AddGroups = ({ users, setUsers, allUsers, curr_user, setGroups }) => {
                                 }}
                             >
                                 Create Group
+                                {console.log("Printing only once")}
                             </button>
                         </div>
                     </Box>
