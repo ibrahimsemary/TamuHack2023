@@ -7,6 +7,7 @@ import Fade from "@mui/material/Fade";
 import InputBox from "./InputBox";
 import Header from "./Header";
 import SelectionDropdown from "./SelectionDropdown";
+import axios from "axios";
 
 const style = {
     position: "absolute",
@@ -19,16 +20,46 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-
-const AddGroups = () => {
+const AddGroups = ({ users, setUsers, allUsers, curr_user, setGroups }) => {
     const [modal, setModal] = useState(false);
     const [groupName, setGroupName] = useState("");
+
+    const createGroup = async () => {
+        const x = {
+            creator: curr_user,
+            title: groupName,
+            description: "",
+            usernames: users,
+        };
+        console.log(x)
+
+        const res = await axios.post(
+            "https://group-sync.onrender.com/add-group",
+            {
+                creator: curr_user,
+                title: groupName,
+                description: "",
+                usernames: users,
+            }
+        );
+        console.log(res);
+
+        const res2 = await axios.get(
+            `https://group-sync.onrender.com/get-groups/${curr_user}`
+        );
+        setGroups(res2.data);
+        console.log(res2)
+        setModal(false);
+    };
     return (
-        <div className='to-center' onClick={() => setModal(true)}>
+        <div className='to-center'>
             <button className='ui button'>
                 <div className='to-center'>
                     {" "}
-                    <i class='user plus huge icon'></i>
+                    <i
+                        class='user plus huge icon'
+                        onClick={() => setModal(true)}
+                    ></i>
                 </div>
             </button>
             <Modal
@@ -54,10 +85,19 @@ const AddGroups = () => {
                         />
                         <br />
                         <br />
-                        <SelectionDropdown />
+                        <SelectionDropdown
+                            allUsers={allUsers}
+                            users={users}
+                            setUsers={setUsers}
+                        />
                         <br />
                         <div className='to-center'>
-                            <button className='ui black submit button'>
+                            <button
+                                className='ui black submit button'
+                                onClick={() => {
+                                    createGroup();
+                                }}
+                            >
                                 Create Group
                             </button>
                         </div>

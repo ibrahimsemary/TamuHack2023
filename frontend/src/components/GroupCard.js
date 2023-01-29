@@ -2,6 +2,7 @@ import { Avatar } from "@mui/material";
 import React from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+const GroupCard = ({ usernames, title, curr_user }) => {
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -36,12 +37,14 @@ const GroupCard = () => {
         "https://media.istockphoto.com/id/1007763808/photo/portrait-of-handsome-latino-african-man.jpg?s=612x612&w=0&k=20&c=XPL1ukeC99OY8HBfNa_njDujOPf9Xz4yCEOo7O3evU0=",
     ];
     const displayAvatars = () => {
-        return avatars.map((pic) => {
-            return (
-                <div className='avatar'>
-                    <Avatar src={pic} alt='Someones pic' />
-                </div>
-            );
+        return usernames.map((name) => {
+            if (name !== curr_user) {
+                return (
+                    <div className='avatar'>
+                        <div>{name}</div>
+                    </div>
+                );
+            }
         });
     };
     const deleteGroup=()=>{
@@ -56,7 +59,7 @@ const GroupCard = () => {
                 </IconButton>
             </div>
             <div className='to-center'>
-                <h3 className='card-title'>Computer Science Rats</h3>
+                <h3 className='card-title'>{title}</h3>
             </div>
             <div className='avatar-container'>{displayAvatars()}</div>
             <Modal
