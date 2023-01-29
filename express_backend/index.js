@@ -3,7 +3,9 @@ const app = express()
 const dotenv = require('dotenv').config();
 const cors = require('cors');
 const pg = require('pg')
-app.use(express.json())
+
+app.use(express.json());
+app.use(cors());
 
 const PORT = process.env.PORT || 4000;
 
@@ -50,8 +52,8 @@ app.use('/', events);
 const groups = require('./routes/groups.js');
 app.use('/', groups);
 
-// const users = require('./routes/users.js');
-// app.use('/', users);
+const users = require('./routes/users.js');
+app.use('/', users);
 
 
 app.listen(PORT, function () {

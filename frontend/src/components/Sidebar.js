@@ -4,17 +4,15 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import SidebarItem from "./SidebarItem";
 
-const Sidebar = ({list}) => {
-    const [active, setActive] = useState(0);
-
+const Sidebar = ({ list, active, setActive }) => {
     const listItems = () => {
         return list.map((item, index) => {
             return (
                 <SidebarItem
                     text={item}
-                    index = {index}
-                    setActive = {setActive}
-                    active = {active}
+                    index={index}
+                    setActive={setActive}
+                    active={active}
                 />
             );
         });

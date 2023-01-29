@@ -5,10 +5,12 @@ import InputBox from "../components/InputBox";
 import "../Overall.css";
 import "./SignInPage.css";
 import { TextField } from "@mui/material";
+import axios from "axios";
 
-const SignInPage = ({ setPage }) => {
+const SignInPage = ({ setPage, setUser }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    
 
     const [error, setError] = useState(false);
 
@@ -27,8 +29,19 @@ const SignInPage = ({ setPage }) => {
         }
     };
 
-    const authenticate = () => {
-        setError(true);
+    const authenticate = async () => {
+        const res = await axios.post(
+            "https://group-sync.onrender.com/authenticate",
+            { username: username, password: password }
+        );
+        console.log(res.data);
+        if (res.data === "User cannot be found") {
+            setError(true);
+        }
+        else{
+            setUser(res.data);
+            setPage("MainPage")
+        }
     };
 
     return (
