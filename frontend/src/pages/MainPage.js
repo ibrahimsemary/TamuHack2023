@@ -6,18 +6,17 @@ import { useState } from "react";
 import AddGroups from "../components/AddGroups";
 import Calendar from "./Calendar"
 
-const MainPage = ({ allUsers, curr_user, groups, setGroups }) => {
+const MainPage = ({ allUsers, curr_user, groups, setGroups,setPage, setSelectedGroup}) => {
     const sidebarList = ["Groups", "Calendar", "Profile"];
     const [active, setActive] = useState(0);
     const [users, setUsers] = useState([]);
-
     const displaySubGroup = () => {
         if (active === 0) {
             const displayGroups = () => {
-                console.log(groups);
                 if (groups.length === 0) {
                     return <div className='ui loader'>Loading</div>;
                 }
+                console.log(groups)
                 return groups.map((group) => {
                     return (
                         <div className='card-on-main'>
@@ -28,6 +27,8 @@ const MainPage = ({ allUsers, curr_user, groups, setGroups }) => {
                                     title={group.title}
                                     curr_user={curr_user}
                                     setGroups = {setGroups}
+                                    setPage = {setPage}
+                                    setSelectedGroup = {setSelectedGroup}
                                 />
                             </div>
                         </div>

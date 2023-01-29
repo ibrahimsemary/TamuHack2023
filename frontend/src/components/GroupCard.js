@@ -13,7 +13,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ProfilePic from "./ProfilePic"
 
-const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
+
+const GroupCard = ({ id, usernames, title, curr_user, setGroups,setPage, setSelectedGroup }) => {
     // const [imgs, setImgs] = useState({});
 
     // const getData = async () => {
@@ -39,9 +40,7 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
         p: 4,
     };
 
-    const popUp = (e) => {
-        return <div>pop up</div>;
-    };
+
 
     const displayAvatars = () => {
         return usernames.map((name) => {
@@ -61,14 +60,12 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
         });
     };
     const deleteGroup = async () => {
-        console.log(id);
         const res = await axios.post(
             "https://group-sync.onrender.com/remove-group",
             {
                 groupsid: id,
             }
         );
-        console.log(res);
         const res2 = await axios.get(
             `https://group-sync.onrender.com/get-groups/${curr_user}`
         );
@@ -76,14 +73,18 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
         setModal(false);
     };
     return (
-        <div className='card-container'>
+        <div className='card-container' >
             <div className='delete-button'>
                 <IconButton onClick={() => setModal(true)}>
                     {" "}
                     <DeleteIcon />
                 </IconButton>
             </div>
-            <div className='to-center'>
+            <div className='to-center' onClick = {
+            ()=>
+            {setPage("GroupPage");
+            setSelectedGroup(id)
+            }}>
                 <h3 className='card-title'>{title}</h3>
             </div>
             <div className='avatar-container'>{displayAvatars()}</div>
