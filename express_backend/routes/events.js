@@ -20,6 +20,7 @@ router.get('/event/:username', async (req, res) => {
             events[i][3] = result.rows[i].end_time;
             events[i][4] = result.rows[i].description;
             events[i][5] = result.rows[i].title;
+            events[i][6] = result.rows[i].eventid;
         }
         res.send(events)
     }
