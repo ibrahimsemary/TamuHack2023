@@ -100,6 +100,18 @@ router.get('/get-groups/:username', async(req, res) => {
     }
 });
 
+router.get('/get-groups/:groupsid', async(req, res) => {
+    try {
+        const {groupsid} = req.params;
+        const result1 = await client.query(`SELECT * FROM groups WHERE id = '${groupsid}' `);
+        var data = result1.rows[0].title
+        res.send(data)
+    } catch (err) {
+        console.log(err.message);
+        res.send(err.message);
+    }
+});
+
 
 router.get('/get-user-from-groupid/:groupid', async(req, res) => {
     try {
