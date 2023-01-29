@@ -114,4 +114,20 @@ router.get('/get-user-from-groupid/:groupid', async(req, res) => {
     }
 })
 
+router.post('/remove-user-group', async(req, res) => {
+    try {
+        const myUser = req.body.username
+        const groupsid = req.body.groupsid
+        client.query(`DELETE FROM groups_users WHERE groupsid = '${groupsid}' AND username = '${myUser}'`, function (err, result) {
+                                    if (err) {
+                                        res.send("No such event or user")
+                                    }
+                                });
+        res.send((groupsid))
+    } catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
+
 module.exports = router

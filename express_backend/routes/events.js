@@ -189,5 +189,21 @@ router.post('/add-user-event', async(req, res) => {
     }
 })
 
+router.post('/remove-user-event', async(req, res) => {
+    try {
+        const myUser = req.body.username
+        const eventid = req.body.eventid
+        client.query(`DELETE FROM event_users WHERE eventid = '${eventid}' AND username = '${myUser}'`, function (err, result) {
+                                    if (err) {
+                                        res.send("No such event or user")
+                                    }
+                                });
+        res.send((eventid))
+    } catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
+
 
 module.exports = router
