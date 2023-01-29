@@ -72,6 +72,7 @@ router.get('/find-best-time/:groupsid/:date/:duration', async(req, res) => {
                 }
             }
         }
+        //res.send(whos_busy)
         let minLength = whos_busy[8*60*60].length
         let minTimes = []
         for(var key in whos_busy){
@@ -83,6 +84,7 @@ router.get('/find-best-time/:groupsid/:date/:duration', async(req, res) => {
                 minTimes = [key]
             }
         }
+
         res.send({minLength, minTimes})
 
     } catch (err) {
@@ -91,10 +93,9 @@ router.get('/find-best-time/:groupsid/:date/:duration', async(req, res) => {
     }
 })
 
-router.get('/whos-free/:groupsid/:date/', async(req, res) => {
+router.get('/whos-busy/:groupsid/:date/:duration', async(req, res) => {
     try {
-        const {groupsid, date} = req.params
-        duration = 30*60
+        const {groupsid, date, duration} = req.params
         await client.query(`CREATE OR REPLACE VIEW view11 AS SELECT event_users.username, eventid FROM groups_users JOIN event_users ON groups_users.username = event_users.username WHERE groupsid='${groupsid}'`)
         const result = await client.query(`SELECT username, start_time, end_time FROM view11 JOIN events ON view11.eventid = events.eventid WHERE date='${date}' ORDER BY start_time`)
         //res.send(result.rows);
@@ -105,22 +106,39 @@ router.get('/whos-free/:groupsid/:date/', async(req, res) => {
             data[i].push(result.rows[i].username)
             let start_vals = result.rows[i].start_time.split(":")
             let end_vals = result.rows[i].end_time.split(":")
-            data[i].push( (start_vals[0]*60 +start_vals[1]) *60 + start_vals[2])
-            data[i].push( (end_vals[0]*60 +end_vals[1]) *60 + end_vals[2])
+            data[i].push( (parseInt(start_vals[0])*60 +parseInt(start_vals[1])) *60 + parseInt(start_vals[2]))
+            data[i].push( (parseInt(end_vals[0])*60 +parseInt(end_vals[1])) *60 + parseInt(end_vals[2]))
         }
+        console.log(data)
         let whos_busy = {}
-        for(var potential_start = 8*60*60; potential_start<24*60*60; potential_start += 30*60){
+        for(var potential_start = 8*60*60; potential_start<23.5*60*60; potential_start += parseInt(duration)){
             whos_busy[potential_start] = []
             for(var i=0; i<data.length; i++){
-                let potential_end = potential_start + duration;
-                if(potential_start < data[i][1] && data[i][1] < potential_end ){
+                let potential_end = potential_start + parseInt(duration);
+                if((data[i][1] < potential_start) && (potential_start < data[i][2] )){
                     whos_busy[potential_start].push(data[i][0]);
-                } else if(potential_start < data[i][2] && data[i][2] < potential_end){
+                } else if((data[i][1] < potential_end) && (potential_end < data[i][2])){
                     whos_busy[potential_start].push(data[i][0]);
                 }
             }
         }
-        res.send(whos_busy)
+        //console.log(whos_busy)
+        let whos_busy2 = {}
+        for(var key in whos_busy){
+            let totalminutes = Math.floor(key/60)
+            let hours = Math.floor(totalminutes/60)
+            let minutes = totalminutes % 60
+            let timeStr = ""
+            if(hours < 10) timeStr += `0${hours}`
+            else timeStr += `${hours}`
+            if(minutes < 10) timeStr += `:0${minutes}`
+            else timeStr += `:${minutes}`
+            whos_busy2[timeStr] = whos_busy[key]
+
+        }
+        res.send(whos_busy2)
+
+        //res.send({minLength, minTimes})
 
     } catch (err) {
         console.log(err)
