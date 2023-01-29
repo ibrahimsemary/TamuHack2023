@@ -88,11 +88,13 @@
 }
 .avatar-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    padding: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 10px;
 }
 .avatar {
     margin-bottom: 10px;
+    align-items: center;
+    justify-content: center;
 }
 .delete-button {
     float: right;
