@@ -72,6 +72,7 @@ router.get('/find-best-time/:groupsid/:date/:duration', async(req, res) => {
                 }
             }
         }
+        //res.send(whos_busy)
         let minLength = whos_busy[8*60*60].length
         let minTimes = []
         for(var key in whos_busy){
@@ -83,6 +84,7 @@ router.get('/find-best-time/:groupsid/:date/:duration', async(req, res) => {
                 minTimes = [key]
             }
         }
+
         res.send({minLength, minTimes})
 
     } catch (err) {
@@ -91,10 +93,9 @@ router.get('/find-best-time/:groupsid/:date/:duration', async(req, res) => {
     }
 })
 
-router.get('/whos-free/:groupsid/:date/', async(req, res) => {
+router.get('/whos-busy/:groupsid/:date/:duration', async(req, res) => {
     try {
-        const {groupsid, date} = req.params
-        duration = 30*60
+        const {groupsid, date, duration} = req.params
         await client.query(`CREATE OR REPLACE VIEW view11 AS SELECT event_users.username, eventid FROM groups_users JOIN event_users ON groups_users.username = event_users.username WHERE groupsid='${groupsid}'`)
         const result = await client.query(`SELECT username, start_time, end_time FROM view11 JOIN events ON view11.eventid = events.eventid WHERE date='${date}' ORDER BY start_time`)
         //res.send(result.rows);
@@ -121,6 +122,8 @@ router.get('/whos-free/:groupsid/:date/', async(req, res) => {
             }
         }
         res.send(whos_busy)
+
+        //res.send({minLength, minTimes})
 
     } catch (err) {
         console.log(err)
