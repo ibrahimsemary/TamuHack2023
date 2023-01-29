@@ -24,7 +24,6 @@ const Calendar = ({ curr_user }) => {
     const [modal, setModal] = useState(false);
     const [eventName, setEventName] = useState("");
     const [events, setEvents] = useState([]);
-    console.log(curr_user);
     const createEvent = async () => {
         if (eventDate && startTime && endTime && eventName) {
             const x = {
@@ -36,7 +35,6 @@ const Calendar = ({ curr_user }) => {
                 date: eventDate.format("YYYY-MM-DD"),
                 usernames: [],
             };
-            console.log(x);
             const res = await axios.post(
                 "https://group-sync.onrender.com/add-event",
                 {
@@ -49,13 +47,11 @@ const Calendar = ({ curr_user }) => {
                     usernames: null,
                 }
             );
-            console.log(res);
 
             const curr_date = dayjs().format("YYYY-MM-DD");
             const res1 = await axios.get(
                 `https://group-sync.onrender.com/get-schedule/${curr_user}/${curr_date}`
             );
-            console.log(res1.data);
             setEvents(res1.data);
             setModal(false);
         }

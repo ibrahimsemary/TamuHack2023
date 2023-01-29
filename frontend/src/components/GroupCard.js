@@ -14,18 +14,6 @@ import axios from "axios";
 import ProfilePic from "./ProfilePic"
 
 const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
-    // const [imgs, setImgs] = useState({});
-
-    // const getData = async () => {
-    //     const res = await axios.get(
-    //         `https://group-sync.onrender.com/get-user-from-groupid/${id}`
-    //     );
-    //     console.log(res);
-    //     setImgs(res.data);
-    // };
-    // useEffect(() => {
-    //     getData();
-    // }, []);
     const [modal, setModal] = useState(false);
     const style = {
         position: "absolute",
@@ -39,9 +27,7 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
         p: 4,
     };
 
-    const popUp = (e) => {
-        return <div>pop up</div>;
-    };
+
 
     const displayAvatars = () => {
         return usernames.map((name) => {
@@ -61,14 +47,12 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups }) => {
         });
     };
     const deleteGroup = async () => {
-        console.log(id);
         const res = await axios.post(
             "https://group-sync.onrender.com/remove-group",
             {
                 groupsid: id,
             }
         );
-        console.log(res);
         const res2 = await axios.get(
             `https://group-sync.onrender.com/get-groups/${curr_user}`
         );
