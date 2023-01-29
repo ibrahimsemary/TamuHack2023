@@ -87,6 +87,7 @@ const GroupCard = ({ id, usernames, title, curr_user, setGroups,setPage, setSele
             <div className='to-center' onClick = {
             ()=>
             {setPage("GroupPage");
+            console.log("clicked")
             setSelectedGroup(id)
             }}>
                 <h3 className='card-title'>{title}</h3>
