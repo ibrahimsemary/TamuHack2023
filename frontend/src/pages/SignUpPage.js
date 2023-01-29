@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import InputBox from "../components/InputBox";
+import axios from "axios"
 
 const SignUpPage = ({ setPage }) => {
     const [firstName, setFirstName] = useState("");
@@ -8,6 +9,7 @@ const SignUpPage = ({ setPage }) => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState(false);
     const [username, setUsername] = useState("");
+    const [password,setPassword] = useState("")
 
     const displayError = () => {
         if (error) {
@@ -22,17 +24,20 @@ const SignUpPage = ({ setPage }) => {
         }
     };
     const SignUp = async () => {
-        if (firstName && lastName && email) {
-            // const res = await axiost.post(
-            //     "https://group-sync.onrender.com/authenticate",
-            //     {
-            //         username: username,
-            //         password: password,
-            //         first_name: firstName,
-            //         last_name: lastName,
-            //         username: username,
-            //     }
-            // );
+        if (firstName && lastName && email&&username&&password) {
+            await axios.post(
+                "https://group-sync.onrender.com/create-user",
+                {
+                    username: username,
+                    password: password,
+                    first_name: firstName,
+                    last_name: lastName,
+                    email: email
+                }
+            ).then(()=>{
+                console.log("This succeed")
+                setPage("SignInPage")
+            })
         } else {
             setError(true);
         }
@@ -79,6 +84,15 @@ const SignUpPage = ({ setPage }) => {
                             placeholder={"Mike Tyson"}
                             text={username}
                             setText={setUsername}
+                        />
+                    </div>
+                    <br />
+                    <div>
+                        <InputBox
+                            title={"Password"}
+                            placeholder={"Mike Tyson"}
+                            text={password}
+                            setText={setPassword}
                         />
                     </div>
                     <br />

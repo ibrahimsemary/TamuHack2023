@@ -38,6 +38,9 @@ const SignInPage = ({ setPage, setUser }) => {
         if (res.data === "User cannot be found") {
             setError(true);
         }
+        else if (res.data === "Cannot Authenticate"){
+            setError(true)
+        }
         else{
             setUser(res.data);
             setPage("MainPage")
