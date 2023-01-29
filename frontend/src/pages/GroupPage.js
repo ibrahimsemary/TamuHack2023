@@ -57,8 +57,8 @@ const GroupPage=({groupId, curr_user, setPage})=>{
                     currentDate={currentDate}
                 />
                 <DayView
-                    startDayHour={9}
-                    endDayHour={14}
+                    startDayHour={8}
+                    endDayHour={20}
                 />
                 <Appointments />
                 </Scheduler>
