@@ -10,6 +10,26 @@ client.connect();
  * requires : creator, start_time, end_time, description
  * UNFINISHED
  */
+router.get('/event/:username', async (req, res) => {
+    try {
+        const { username } = req.params;
+        const result = await client.query(`SELECT * FROM event_users NATURAL JOIN events WHERE username = '${username}'`)
+        console.log(result)
+        const events = []
+        for (var i = 0; i < result.rows.length; ++i){
+            events[i] = new Array(4)
+            events[i][0] = result.rows[i].creator;
+            events[i][1] = result.rows[i].start_time;
+            events[i][2] = result.rows[i].end_time;
+            events[i][3] = result.rows[i].description;
+        }
+        res.send(events)
+    }
+    catch (err) {
+        console.log(err.message);
+        res.send("User cannot be found");
+    }
+})
 router.post('/add-event', async(req, res) => {
     try {
         const usernames = req.body.usernames
