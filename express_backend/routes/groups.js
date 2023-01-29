@@ -9,7 +9,7 @@ const router = express.Router()
 /**
  * requires : creator and title
  */
-router.get('/add-group', async (req, res) => {
+router.get('/getusers', async (req, res) => {
     try {
         const result = await client.query(`SELECT username FROM users`)
         const usernames = []
