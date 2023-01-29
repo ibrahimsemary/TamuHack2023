@@ -39,20 +39,24 @@ const AddGroups = ({ users, setUsers, allUsers, curr_user, setGroups }) => {
         const res2 = await axios.get(
             `https://group-sync.onrender.com/get-groups/${curr_user}`
         );
+        console.log(res2.data);
         setGroups(res2.data);
         setModal(false);
     };
     return (
         <div className='to-center'>
-            <button className='ui button'>
-                <div className='to-center'>
-                    {" "}
-                    <i
-                        class='user plus huge icon'
-                        onClick={() => setModal(true)}
-                    ></i>
-                </div>
-            </button>
+            <div className='button-stuff'>
+                <button className='ui button'>
+                    <div className='to-center'>
+                        {" "}
+                        <i
+                            class='user plus huge icon'
+                            onClick={() => setModal(true)}
+                        ></i>
+                    </div>
+                </button>
+            </div>
+
             <Modal
                 aria-labelledby='transition-modal-title'
                 aria-describedby='transition-modal-description'
@@ -73,7 +77,6 @@ const AddGroups = ({ users, setUsers, allUsers, curr_user, setGroups }) => {
                             title={"Group Name"}
                             text={groupName}
                             setText={setGroupName}
-                            
                         />
                         <br />
                         <br />

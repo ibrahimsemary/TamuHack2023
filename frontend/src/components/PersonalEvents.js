@@ -19,6 +19,7 @@ const PersonalEvents = ({ curr_user, events, setEvents }) => {
         const res = await axios.get(
             `https://group-sync.onrender.com/get-schedule/${curr_user}/${curr_date}`
         );
+        console.log(res)
         setEvents(res.data);
     };
     useEffect(() => {

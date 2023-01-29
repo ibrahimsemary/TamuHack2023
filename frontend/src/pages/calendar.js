@@ -35,6 +35,7 @@ const Calendar = ({ curr_user }) => {
                 date: eventDate.format("YYYY-MM-DD"),
                 usernames: [],
             };
+            console.log(x);
             const res = await axios.post(
                 "https://group-sync.onrender.com/add-event",
                 {
@@ -44,9 +45,10 @@ const Calendar = ({ curr_user }) => {
                     description: "",
                     title: eventName,
                     date: eventDate.format("YYYY-MM-DD"),
-                    usernames: null,
+                    groupsid: 0
                 }
             );
+            console.log(res);
 
             const curr_date = dayjs().format("YYYY-MM-DD");
             const res1 = await axios.get(
