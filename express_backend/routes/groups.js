@@ -26,7 +26,7 @@ router.get('/getusers', async (req, res) => {
 router.post('/remove-group', async(req, res) => {
     try {
         const groupsid = req.body.groupsid
-        client.query(`DELETE FROM groups WHERE groupsid = '${groupsid}'`, function (err, result) {
+        client.query(`DELETE FROM groups WHERE id = '${groupsid}'`, function (err, result) {
             if (err) {
                 res.send("Group is not made")
             }
